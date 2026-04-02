@@ -65,14 +65,20 @@ export default function Register() {
       navigate('/profile/edit')
     } catch (error) {
       console.error('Error al registrar:', error)
+
+      // Manejo específico de errores de Supabase
       if (error.message?.includes('already')) {
         setError('Este email ya está registrado')
       } else if (error.message?.includes('weak')) {
         setError('Contraseña demasiado débil')
+      } else if (error.message?.includes('rate limit')) {
+        setError('Demasiados intentos. Por favor esperá unos minutos e intentá con otro email.')
       } else if (error.message?.includes('invalid') || error.message?.includes('Email')) {
         setError('Dirección de correo inválida. Revísela por favor e intente nuevamente.')
       } else if (error.name === 'AuthApiError') {
         setError('Dirección de correo inválida. Revísela por favor e intente nuevamente.')
+      } else if (error.name === 'AuthRetryableFetchError') {
+        setError('Error de conexión. Verificá tu internet e intentá de nuevo.')
       } else {
         setError('Error al crear cuenta. Intenta nuevamente.')
       }
