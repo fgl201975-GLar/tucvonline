@@ -69,6 +69,10 @@ export default function Register() {
         setError('Este email ya está registrado')
       } else if (error.message?.includes('weak')) {
         setError('Contraseña demasiado débil')
+      } else if (error.message?.includes('invalid') || error.message?.includes('Email')) {
+        setError('Dirección de correo inválida. Revísela por favor e intente nuevamente.')
+      } else if (error.name === 'AuthApiError') {
+        setError('Dirección de correo inválida. Revísela por favor e intente nuevamente.')
       } else {
         setError('Error al crear cuenta. Intenta nuevamente.')
       }

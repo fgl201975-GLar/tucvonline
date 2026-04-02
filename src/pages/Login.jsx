@@ -33,10 +33,12 @@ export default function Login() {
       navigate('/dashboard')
     } catch (error) {
       console.error('Error al iniciar sesión:', error)
-      if (error.message?.includes('Invalid')) {
+      if (error.message?.includes('Invalid') || error.message?.includes('credentials')) {
         setError('Email o contraseña incorrectos')
-      } else if (error.message?.includes('not')) {
+      } else if (error.message?.includes('not found') || error.message?.includes('User')) {
         setError('Usuario no encontrado')
+      } else if (error.name === 'AuthApiError') {
+        setError('Email o contraseña incorrectos')
       } else {
         setError('Error al iniciar sesión. Verifica tus datos.')
       }
