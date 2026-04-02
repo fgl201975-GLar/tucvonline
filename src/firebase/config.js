@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
 
 // Configuración de Supabase
-const supabaseUrl = 'https://eizqjdhuuihczirctsse.supabase.co'
+const supabaseUrl = 'https://eizqjdhupihczirctsse.supabase.co'
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVpenFqZGh1cGloY3ppcmN0c3NlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUwNjgzODMsImV4cCI6MjA5MDY0NDM4M30.L91DZuF45QVW2FrxAAOGnq3CxOAGJhnyUDNuzjf6ty8'
 
 // Crear cliente de Supabase
