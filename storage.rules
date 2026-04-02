@@ -1,0 +1,13 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Fotos de perfil de usuarios
+    match /fotos/{userId}/{allPaths=**} {
+      // Cualquiera puede leer fotos (para perfiles públicos)
+      allow read: if true;
+      
+      // Solo el dueño puede subir/editar sus fotos
+      allow write: if request.auth != null && request.auth.uid == userId;
+    }
+  }
+}

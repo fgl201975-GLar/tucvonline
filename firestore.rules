@@ -1,0 +1,24 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Colección de usuarios
+    match /usuarios/{userId} {
+      // Cualquiera puede leer perfiles de usuario (para que sean públicos)
+      allow read: if true;
+      
+      // Solo el dueño puede escribir su propio perfil
+      allow write: if request.auth != null && request.auth.uid == userId;
+      
+      // Solo admins pueden escribir en cualquier perfil (para moderación)
+      allow write: if request.auth != null && 
+                   get(/databases/$(database)/documents/users/$(request.auth.uid)).data.email == 'admin@tucvonline.com';
+    }
+    
+    // Colección de visitas (para estadísticas)
+    match /visitas/{visitaId} {
+      allow create: if true;
+      allow read, update, delete: if request.auth != null;
+    }
+  }
+}
