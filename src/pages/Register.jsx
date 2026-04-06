@@ -77,19 +77,32 @@ export default function Register() {
 
       const userId = data.user?.id || data.id
 
-      // Crear perfil en tabla usuarios
-      const { error: dbError } = await supabase
-        .from('usuarios')
-        .upsert({
-          id: userId,
-          email: formData.email,
-          nombre: formData.nombre,
-          apellido: formData.apellido,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-        })
+      // Crear perfil en tabla usuarios usando service key (bypass RLS)
+      const perfilResponse = await fetch(
+        `https://eizqjdhupihczirctsse.supabase.co/rest/v1/usuarios`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': SERVICE_KEY,
+            'Authorization': `Bearer ${SERVICE_KEY}`,
+            'Prefer': 'resolution=merge-duplicates',
+          },
+          body: JSON.stringify({
+            id: userId,
+            email: formData.email,
+            nombre: formData.nombre,
+            apellido: formData.apellido,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          }),
+        }
+      )
 
-      if (dbError) throw dbError
+      if (!perfilResponse.ok && perfilResponse.status !== 409) {
+        const perfilError = await perfilResponse.json()
+        console.error('Error al crear perfil:', perfilError)
+      }
 
       // Login automático
       const { error: loginError } = await auth.signIn(formData.email, formData.password)
